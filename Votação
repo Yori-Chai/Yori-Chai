@@ -1,0 +1,110 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .option {
+            margin: 10px 0;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #resultado {
+            display: none;
+        }
+        #adminArea {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Votação</h1>
+        <form id="votacaoForm">
+            <div class="option">
+                <input type="radio" id="opcao1" name="voto" value="opcao1">
+                <label for="opcao1">Opção 1 - Jucelma</label>
+            </div>
+            <div class="option">
+                <input type="radio" id="opcao2" name="voto" value="opcao2">
+                <label for="opcao2">Opção 2 - Marcelo</label>
+            </div>
+            <div class="option">
+                <input type="radio" id="opcao3" name="voto" value="opcao3">
+                <label for="opcao3">Opção 3 - Stefany</label>
+            </div>
+            <button type="submit" id="botaoVotar">Votar</button>
+        </form>
+        <div id="adminArea">
+            <input type="password" id="senhaAdmin" placeholder="Senha de administrador">
+            <button id="botaoMostrarResultados">Mostrar Resultados</button>
+        </div>
+        <div id="resultado">
+            <h2>Resultados da Votação</h2>
+            <div id="resultadoTexto"></div>
+        </div>
+    </div>
+
+    <script>
+        const votos = {
+            opcao1: 0,
+            opcao2: 0,
+            opcao3: 0
+        };
+
+        const senhaCorreta = "140922"; // Defina sua senha aqui
+
+        document.getElementById('votacaoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const voto = formData.get('voto');
+            if (voto) {
+                votos[voto]++;
+                document.getElementById('botaoVotar').disabled = true; // Desabilita o botão de votar
+                setTimeout(resetarVotacao, 10000); // Define um temporizador para reativar o botão após 10 segundos
+            } else {
+                alert("Por favor, selecione uma opção antes de votar.");
+            }
+        });
+
+        function resetarVotacao() {
+            document.getElementById('botaoVotar').disabled = false; // Reativa o botão de votar
+        }
+
+        document.getElementById('botaoMostrarResultados').addEventListener('click', function() {
+            const senha = document.getElementById('senhaAdmin').value;
+            if (senha === senhaCorreta) {
+                exibirResultados();
+            } else {
+                alert("Senha incorreta!");
+            }
+        });
+
+        function exibirResultados() {
+            const resultadoTextoDiv = document.getElementById('resultadoTexto');
+            resultadoTextoDiv.innerHTML = `
+                <p>Opção 1: ${votos.opcao1} votos</p>
+                <p>Opção 2: ${votos.opcao2} votos</p>
+                <p>Opção 3: ${votos.opcao3} votos</p>
+            `;
+            document.getElementById('resultado').style.display = 'block'; // Exibe os resultados
+        }
+    </script>
+</body>
+</html>
